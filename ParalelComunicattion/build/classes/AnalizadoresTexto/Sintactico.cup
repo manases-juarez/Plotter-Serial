@@ -1,0 +1,78 @@
+package Analizadores;
+
+import java.util.*; 
+import java_cup.runtime.Symbol;
+
+parser code
+{:  
+    /*public static LinkedList<AcepErr> TablaErr=new LinkedList<AcepErr>();*/
+
+    public String resultado = "";
+    //Metodo al que se llama automaticamente ante algun error sintactico
+    public void syntax_error(Symbol s)
+    {        
+        String lexema = s.value.toString();
+        int fila = s.right;
+        int columna = s.left;
+        
+        System.out.println("!!!!!!! Error Sintactico Recuperado !!!!!!!");
+        System.out.println("\t\tLexema: "+lexema);
+        System.out.println("\t\tFila: "+fila);
+        System.out.println("\t\tColumna: "+columna);
+
+        //lista_errores.add(new ErrorT(lexema, fila, columna,"sintactico" ,"Simbolo no esperado"));
+        /*AcepErr datos =new AcepErr(lexema, "ERROR SINTACTICO" ,fila,columna,"Simbolo no esperado");
+            TablaErr.add(datos);
+            */
+    }
+
+    //Metodo al que se llama en el momento en que ya no es posible una recuperacion de errores
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
+    {        
+        String lexema = s.value.toString();
+        int fila = s.right;
+        int columna = s.left;
+        
+        System.out.println("!!!!!!! Error Sintactico, Panic Mode !!!!!!! ");
+        System.out.println("\t\tLexema: "+lexema);
+        System.out.println("\t\tFila: "+fila);
+        System.out.println("\t\tColumna: "+columna);
+
+       /*AcepErr datos =new AcepErr(lexema, "ERROR SINTACTICO" ,fila,columna,"Simbolo no esperado Error Fatal");
+                   TablaErr.add(datos);
+                  */
+        //lista_errores.add(new ErrorT(lexema, fila, columna,"sintactico" ,"Simbolo no esperado, Panic Mode"));
+    }
+
+    public void semantic(Symbol cur_token, String n) 
+    {
+        System.out.println("error semantico ");
+    }
+
+    public void semantic(String msg, Object obj) {}
+
+:}
+
+action code
+{:
+
+:}  
+
+
+terminal tLlaveA, tLlaveC, tCoordenada, tNoufe, tDospuntos, tCorcheteA, tCorcheteC;
+terminal String tX, tY, tComa, tDigito;
+
+non terminal String INICIO, LISTA, ITEM;
+
+start with INICIO;
+
+INICIO ::=  tLlaveA tCoordenada tDospuntos tCorcheteA LISTA tCorcheteC tLlaveC {: :}
+        ;
+
+LISTAHTML ::= LISTA tComa ITEM {: :}
+           | ITEM {: :}
+           ;
+
+ITEM ::= tLlaveA tX tDospuntos tDigito tComa tY tDospuntos tDigito tLlaveC
+       ;
+
