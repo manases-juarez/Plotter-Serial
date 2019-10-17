@@ -243,7 +243,7 @@ public class Ventana extends javax.swing.JFrame {
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         // TODO add your handling code here:
         Comunicacion a = new Comunicacion();
-        a.ejecutar();
+        a.ejecutar(this.Matriz);
     }//GEN-LAST:event_jButton13ActionPerformed
 
     /**
