@@ -18,9 +18,9 @@ import javax.swing.JPanel;
 public class Celda {
     int X = 0;
     int Y = 0;
-    JButton boton;
+    public JButton boton;
     int estado = 0;
-    enumColor color;
+    public enumColor color;
     
     public Celda(int x, int y, int estado, enumColor color, JPanel panel){
         this.X = x;
@@ -31,6 +31,10 @@ public class Celda {
         panel.add(boton);
         panel.repaint();
         
+    }
+    
+    public void setEstado(int i){
+        this.estado = i;
     }
     
     public int getX(){
@@ -49,7 +53,7 @@ public class Celda {
         JButton nuevo  = new JButton();
         nuevo.setLayout(null);
         nuevo.setBackground(Color.LIGHT_GRAY);
-        nuevo.setBounds(x*50, y*25, 50, 25);
+        nuevo.setBounds(x*40, y*40, 40, 40);
         //nuevo.setBackground(Color.red);
         nuevo.setText("");
         nuevo.addActionListener(new ActionListener(){

@@ -5,6 +5,7 @@
 package paralelcomunicattion;
 
 import Estructuras.Celda;
+import jnpout32.pPort;
 import java.io.DataOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -27,6 +28,8 @@ public class Comunicacion {
     private static ParallelPort parallelPort;
     private static CommPortIdentifier port;
     
+    
+    
     public static final String PARALLEL_PORT  = "LPT1";
     public static final String[] PORT_TYPE = {"Serial Port", "Paralel Port"};
     
@@ -41,6 +44,19 @@ public class Comunicacion {
             port = CommPortIdentifier.getPortIdentifier("LPT1");
             int port_type = port.getPortType();
             String port_name = port.getName();
+            
+            pPort nuevaX = new pPort();
+            
+            //nuevaX.input(0x379);
+            short di = 0x379;
+            short pin = 2;
+            short c = 1;
+            int r = nuevaX.input(di);
+            System.out.println("prueba de entrada" + r);
+            
+            //nuevaX.output(di, di);
+            System.out.println("encendiendo pin 2");
+            nuevaX.setPin(pin, c);
             
             System.out.println("Port type: " + PORT_TYPE[port_type - 1]);
             System.out.println("Port name: " + port_name);
@@ -65,11 +81,13 @@ public class Comunicacion {
                     System.out.println("Imprimiendo x " + x + " binario: " + binaryX);
                     for(int j=0; j<8; j++){
                         if(j < tam){
-                            if(binaryX.charAt(j) == '0')
+                            if(binaryX.charAt(j) == '0'){
                                 dataOutputStream.write(0);
+                            }                                
                             else
                                 dataOutputStream.write(1);
                         }else{
+                            System.out.println("here");
                             dataOutputStream.write(0);
                         }
                         dataOutputStream.flush();

@@ -4,10 +4,26 @@
  */
 package Interfaz;
 
+import Analizadores.Lexico;
+import Analizadores.Sintactico;
 import Estructuras.Celda;
 import Estructuras.Celda.enumColor;
+import Estructuras.Coordenada;
+import Estructuras.Panel;
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
+import javax.swing.JFileChooser;
+import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import paralelcomunicattion.Comunicacion;
 
 /**
@@ -20,19 +36,11 @@ public class Ventana extends javax.swing.JFrame {
     /**
      *
      */
-    public LinkedList<Celda> Matriz = new LinkedList<Celda>();
     /**
      * Creates new form Ventana
      */
     public Ventana() {
-        initComponents();
-        for(int i=0; i<16; i++){
-            for(int j=0; j<8; j++){
-                Celda celda = new Celda(j, i, 0, Celda.enumColor.AZUL, this.jPanel1);
-                Matriz.add(celda);
-            }
-        }
-        
+        initComponents();                
     }
 
     /**
@@ -44,7 +52,6 @@ public class Ventana extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -61,19 +68,11 @@ public class Ventana extends javax.swing.JFrame {
         jButton11 = new javax.swing.JButton();
         jButton12 = new javax.swing.JButton();
         jButton13 = new javax.swing.JButton();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jButton14 = new javax.swing.JButton();
+        jButton16 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 455, Short.MAX_VALUE)
-        );
 
         jButton1.setBackground(new java.awt.Color(0, 0, 0));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -108,27 +107,81 @@ public class Ventana extends javax.swing.JFrame {
         });
 
         jButton5.setText("Abrir");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
-        jButton6.setText("jButton6");
+        jButton6.setText("Guardar");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
-        jButton7.setText("jButton7");
+        jButton7.setText("Guardar como...");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Figuras");
 
         jButton8.setText("Cuadrado");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         jButton9.setText("Círculo");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
 
         jButton10.setText("Triángulo");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
 
         jButton11.setText("Línea");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
 
         jButton12.setText("Estrella");
+        jButton12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton12ActionPerformed(evt);
+            }
+        });
 
         jButton13.setText("Imprimir");
         jButton13.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton13ActionPerformed(evt);
+            }
+        });
+
+        jButton14.setText("Nuevo");
+        jButton14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton14ActionPerformed(evt);
+            }
+        });
+
+        jButton16.setText("X");
+        jButton16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton16ActionPerformed(evt);
             }
         });
 
@@ -139,38 +192,47 @@ public class Ventana extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addComponent(jLabel1))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(49, 49, 49)
+                                .addComponent(jLabel1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                                        .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jLabel2)
+                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3)
+                            .addComponent(jButton8)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jButton12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                                .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addComponent(jLabel2)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(jButton8)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jButton12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton5)
-                .addGap(18, 18, 18)
-                .addComponent(jButton6)
-                .addGap(18, 18, 18)
-                .addComponent(jButton7)
-                .addContainerGap())
+                        .addComponent(jButton14)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton7)))
+                .addContainerGap(25, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton13)
-                .addGap(193, 193, 193))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton13)
+                        .addGap(217, 217, 217))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton16)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -179,10 +241,13 @@ public class Ventana extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton5)
                     .addComponent(jButton6)
-                    .addComponent(jButton7))
+                    .addComponent(jButton7)
+                    .addComponent(jButton14))
+                .addGap(7, 7, 7)
+                .addComponent(jButton16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -205,13 +270,13 @@ public class Ventana extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(245, 245, 245))
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(2, 2, 2)
-                .addComponent(jButton13)
-                .addContainerGap())
+                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton13)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
@@ -243,9 +308,329 @@ public class Ventana extends javax.swing.JFrame {
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         // TODO add your handling code here:
         Comunicacion a = new Comunicacion();
-        a.ejecutar(this.Matriz);
+        //a.ejecutar(this.Matriz);
     }//GEN-LAST:event_jButton13ActionPerformed
 
+    
+    LinkedList<Panel> pestañas = new LinkedList<Panel>();
+    int numpestañas = 0;
+    //Botón para abrir documento
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        JFileChooser buscador = new JFileChooser();
+        FileNameExtensionFilter docFilter = new FileNameExtensionFilter("draw", "DRAW");
+        buscador.setFileFilter(docFilter);
+        buscador.showOpenDialog(buscador);
+        
+        try{
+            String path = buscador.getSelectedFile().getAbsolutePath();
+            String ir = leer(path);
+            
+            String name = buscador.getSelectedFile().getName();
+            Boolean band = false;
+            //comprobar si ya fue abierto el archivo
+            if(pestañas.size() != 0){
+                for(int i=0; i<pestañas.size(); i++){
+                    if(pestañas.get(i).nombre.equals(name)){
+                        band = true;
+                    }
+                }
+            }
+
+            if(band){
+                System.out.println("Archivo ya esta abierto");
+            }else{
+                //crear un panel
+                Lexico lexico = new Lexico(new BufferedReader(new StringReader(ir)));
+                Sintactico sintactico = new Sintactico(lexico);
+                try{
+                    LinkedList<Coordenada> lista;
+                    sintactico.parse();
+                    lista = sintactico.resultado;
+                    //Crear un nuevo lienzo
+                    
+                    LinkedList<Celda> lienzo = new LinkedList<Celda>();
+                    JPanel panel = new JPanel();
+                    panel.setLayout(null);
+                    
+                    this.jTabbedPane1.addTab(name, panel);
+                    int index = numpestañas;
+                    numpestañas++;                    
+                    
+                    for(int i=0; i<16; i++){
+                        for(int j=0; j<8; j++){
+                            Celda celda = new Celda(j, i, 0, Celda.enumColor.AZUL, panel);
+                            lienzo.add(celda);
+                            for(Coordenada k : lista){
+                                if(k != null){
+                                    if(k.getX().equals(Integer.toString(j)) && k.getY().equals(Integer.toString(i))){
+                                        System.out.println("coincidencia X: " + k.getX() + " Y:  " + k.getY() );                                    
+                                        celda.setEstado(1);
+                                        celda.boton.setText("1");
+                                        celda.boton.setBackground(Color.BLUE);
+                                    }
+                                    
+                                }
+                            }                            
+                        }
+                    }
+                    Panel panel_ = new Panel(panel, name, lienzo, index, ir, path);
+                    pestañas.add(panel_);
+                    
+                }catch(Exception e){
+                    System.out.println("Error al compilar archivo " + e);
+                }
+            }                                    
+        }catch (Exception e){
+            System.out.println("No se pudo abrir el archivo");
+        }
+        
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    //Cerrar
+    private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
+        // TODO add your handling code here:
+        int index = this.jTabbedPane1.getSelectedIndex();
+        if(pestañas.size() != 0){
+            for(int i = 0; i<pestañas.size(); i++){
+                Panel panel = pestañas.get(i);
+                if(panel.index == index){
+                    this.jTabbedPane1.remove(this.jTabbedPane1.getSelectedIndex());
+                    pestañas.remove(panel.index);
+                    numpestañas--;
+                }                
+            }
+            for(int i = 0; i<pestañas.size(); i++){
+                Panel panel = pestañas.get(i);
+                panel.index = i;
+            }
+        }
+    }//GEN-LAST:event_jButton16ActionPerformed
+
+    //Nuevo
+    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
+        // TODO add your handling code here:
+        LinkedList<Celda> lienzo = new LinkedList<Celda>();
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+        
+        int c = this.jTabbedPane1.getTabCount();
+        
+        if(pestañas.size() != 0){
+            for(int i=0; i<pestañas.size(); i++){
+                if(pestañas.get(i).nombre.equals("Nuevo"+c)){
+                    c++;
+                }
+            }
+        }
+        
+        this.jTabbedPane1.addTab("Nuevo" + c, panel);
+        int index = numpestañas;
+        numpestañas++;                    
+
+        for(int i=0; i<16; i++){
+            for(int j=0; j<8; j++){
+                Celda celda = new Celda(j, i, 0, Celda.enumColor.AZUL, panel);
+                lienzo.add(celda);                
+            }
+        }
+        Panel panel_ = new Panel(panel, "Nuevo", lienzo, index, "Vacio", "0");
+        pestañas.add(panel_);
+        
+    }//GEN-LAST:event_jButton14ActionPerformed
+
+    //Guardar
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        int index = this.jTabbedPane1.getSelectedIndex();
+        Panel panel = null;
+        if(pestañas.size() != 0){
+            for(int i = 0; i<pestañas.size(); i++){
+                panel = pestañas.get(i);
+                if(panel.index == index)
+                    break;
+            }
+        }
+        if(panel != null){
+            if(panel.url.equals("0"))                
+                panel.url = guardar();
+            else{
+                crearArchivo(obtenerContenido(), panel.url);
+            }
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    //Guardar como...
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        guardar();
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    //Cuadrado
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+        String contenido = leer("src/Instrucciones/cuadrado.draw");
+        insertarFigura(contenido);
+        
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    //Circulo
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+        String contenido = leer("src/Instrucciones/circulo.draw");
+        insertarFigura(contenido);
+    }//GEN-LAST:event_jButton9ActionPerformed
+    
+    //Triangulo
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        // TODO add your handling code here:
+        String contenido = leer("src/Instrucciones/triangulo.draw");
+        insertarFigura(contenido);
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    //Linea
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        // TODO add your handling code here:
+        String contenido = leer("src/Instrucciones/linea.draw");
+        insertarFigura(contenido);
+    }//GEN-LAST:event_jButton11ActionPerformed
+    
+    //Estrella
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+        // TODO add your handling code here:
+        String contenido = leer("src/Instrucciones/estrella.draw");
+        insertarFigura(contenido);
+    }//GEN-LAST:event_jButton12ActionPerformed
+
+    public void insertarFigura(String contenido){
+        Lexico lexico = new Lexico(new BufferedReader(new StringReader(contenido)));
+        Sintactico sintactico = new Sintactico(lexico);
+        try{
+            LinkedList<Coordenada> lista;
+            sintactico.parse();
+            lista = sintactico.resultado;
+            //Crear un nuevo lienzo
+
+            int index = this.jTabbedPane1.getSelectedIndex();
+            
+            LinkedList<Celda> celdas = new LinkedList<Celda>();
+            Panel panel = null;
+            if(pestañas.size() != 0){
+                for(int i = 0; i<pestañas.size(); i++){
+                    panel = pestañas.get(i);
+                    if(panel.index == index)
+                        break;
+                }
+            }
+            if(panel != null){
+                celdas = panel.elementos;
+                for(Coordenada k : lista){                    
+                    if(k != null){
+                        for(Celda i : celdas){
+                            if(k.getX().equals(Integer.toString(i.getX())) && k.getY().equals(Integer.toString(i.getY()))){                            
+                                i.boton.setBackground(Color.BLACK);
+                                i.boton.setText("1");
+                                i.setEstado(1);
+                                break;
+                            }                                                    
+                        }
+                    }
+                }
+            }                                   
+        }catch(Exception e){
+            System.out.println("Error al compilar archivo " + e);
+        }
+    }
+    
+    public void crearArchivo(String contenido, String path){
+        try{
+            File archivo = new File(path);
+            if(archivo.delete())
+                System.out.println("El fichero ha sido borrado satisfactoriamente");
+            else
+                System.out.println("El fichero no puede ser borrado");
+            
+            FileWriter escribir = new FileWriter(archivo, true);            
+            escribir.write(contenido);
+            escribir.close();
+        }catch (Exception e){
+            System.out.println("Error al escribir fichero");
+        }
+    }
+    
+    public String guardar(){
+        JFileChooser guardar = new JFileChooser();
+        guardar.setApproveButtonText("Guardar como...");
+        guardar.showSaveDialog(null);
+        File archivo = new File(guardar.getSelectedFile() + ".draw");
+        try{
+            BufferedWriter salida = new BufferedWriter(new FileWriter(archivo));
+            salida.write(obtenerContenido());
+            salida.close();            
+        }catch(Exception e){
+            System.out.println("No se pudo guardar");
+        }
+        return archivo.getAbsolutePath();
+    }
+    
+    public String obtenerContenido(){
+        int index = this.jTabbedPane1.getSelectedIndex();
+        String contenido = "{\n \"Coordenadas\":[\n";
+        LinkedList<Celda> lista = new LinkedList<Celda>();
+        if(pestañas.size() != 0){
+            for(int i = 0; i<pestañas.size(); i++){
+                Panel panel = pestañas.get(i);
+                if(panel.index == index){
+                    lista = panel.elementos;                    
+                }
+            }
+        }
+        int a = contar(lista);
+        for(Celda i: lista){
+            if(i != null){
+                if(i.getEstado() == 1){
+                    contenido = contenido + "{ \"x\": "+i.getX()+", \"y\": "+i.getY()+"}";
+                    if(a == 1){
+                        contenido = contenido + "\n";
+                    }else{
+                        contenido = contenido + ",\n";
+                        a--;
+                    }
+                }
+
+            }
+        }
+        if(a == 0){
+            contenido = contenido + "{ \"x\": 16 , \"y\": 16}\n";
+        }
+        contenido = contenido + "\n]\n}";
+        return contenido;
+    }
+    
+    public int contar(LinkedList<Celda> lista){
+        int c = 0;
+        for(Celda p: lista){
+            if(p.getEstado() == 1)
+                c++;
+        }
+        return c;
+    }
+    
+    public String leer(String path){
+        String texto = "", lineas = "";
+        try{
+            BufferedReader contenido = new BufferedReader(new InputStreamReader(new FileInputStream(path), "UTF-8"));
+            
+            while((texto = contenido.readLine()) != null){
+                lineas = lineas + texto + "\n";
+            }
+            
+            return lineas;
+        }catch (Exception e){
+            return "";            
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -286,6 +671,8 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
+    private javax.swing.JButton jButton14;
+    private javax.swing.JButton jButton16;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -297,6 +684,6 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
 }
