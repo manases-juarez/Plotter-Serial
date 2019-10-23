@@ -21,190 +21,120 @@ import javax.comm.UnsupportedCommOperationException;
  *
  * @author Grupo1
  */
-public class Comunicacion {
-    private static OutputStream outputStream;
-    private static FileReader inputStream;
-    private static DataOutputStream dataOutputStream;
-    private static ParallelPort parallelPort;
-    private static CommPortIdentifier port;
-    
-    
-    
-    public static final String PARALLEL_PORT  = "LPT1";
-    public static final String[] PORT_TYPE = {"Serial Port", "Paralel Port"};
-    
+public class Comunicacion {        
+        
     public Comunicacion(){
         
     }
     
-    public void ejecutar(LinkedList<Celda> matriz){
+    public String convertir_binario(int x, int y){
+        String cadena = "";
+        
+        String a = "";
+        String b = "";
+        switch(x){
+            case 0:
+                a = "000";
+                break;    
+            case 1:
+                a = "001";
+                break;    
+            case 2:
+                a = "010";
+                break;    
+            case 3:
+                a = "011";
+                break;    
+            case 4:
+                a = "100";
+                break;    
+            case 5:
+                a = "101";
+                break;    
+            case 6:
+                a = "110";
+                break;    
+            case 7:
+                a = "111";
+                break;
+            default:
+                break;                
+        }
+        switch(y){
+            case 0:
+                b = "0000";
+                break;    
+            case 1:
+                b = "0001";
+                break;    
+            case 2:
+                b = "0010";
+                break;    
+            case 3:
+                b = "0011";
+                break;    
+            case 4:
+                b = "0100";
+                break;    
+            case 5:
+                b = "0101";
+                break;    
+            case 6:
+                b = "0110";
+                break;    
+            case 7:
+                b = "0111";
+                break;
+            case 8:
+                b = "1000";
+                break;    
+            case 9:
+                b = "1001";
+                break;    
+            case 10:
+                b = "1010";
+                break;    
+            case 11:
+                b = "1011";
+                break;    
+            case 12:
+                b = "1100";
+                break;    
+            case 13:
+                b = "1101";
+                break;    
+            case 14:
+                b = "1110";
+                break;    
+            case 15:
+                b = "1111";
+                break;    
+            default:
+                break;                
+        }        
+        cadena = a + b;
+        System.out.println(cadena);        
+        return cadena;
+    }
+    
+    public void ejecutar_(String cadena){
         System.out.println("Star connection...");
         
         try{
-            port = CommPortIdentifier.getPortIdentifier("LPT1");
-            int port_type = port.getPortType();
-            String port_name = port.getName();
-            
-            pPort nuevaX = new pPort();
-            
-            //nuevaX.input(0x379);
-            short di = 0x379;
+            pPort puerto = new pPort();
             short pin = 2;
-            short c = 1;
-            int r = nuevaX.input(di);
-            System.out.println("prueba de entrada" + r);
             
-            //nuevaX.output(di, di);
-            System.out.println("encendiendo pin 2");
-            nuevaX.setPin(pin, c);
-            
-            System.out.println("Port type: " + PORT_TYPE[port_type - 1]);
-            System.out.println("Port name: " + port_name);
-            
-            //open port            
-            parallelPort = (ParallelPort) port.open("MyApp", 500);
-            outputStream = parallelPort.getOutputStream();
-            dataOutputStream = new DataOutputStream(outputStream);
-            System.out.println("Owned by: " + port.getCurrentOwner());
-            parallelPort.setMode(1);
-            
-            int x, y;
-            
-            for(int i = 0; i<matriz.size(); i++){
-                Celda celda = matriz.get(i);
-                if(celda.getEstado() == 1){
-                    x = celda.getX();
-                    y = celda.getY();
-                    String binaryX = Integer.toBinaryString(x);
-                    String binaryY = Integer.toBinaryString(y);
-                    int tam = binaryX.length();
-                    System.out.println("Imprimiendo x " + x + " binario: " + binaryX);
-                    for(int j=0; j<8; j++){
-                        if(j < tam){
-                            if(binaryX.charAt(j) == '0'){
-                                dataOutputStream.write(0);
-                            }                                
-                            else
-                                dataOutputStream.write(1);
-                        }else{
-                            System.out.println("here");
-                            dataOutputStream.write(0);
-                        }
-                        dataOutputStream.flush();
-                        System.out.println("segundo" + j);
-                        Thread.sleep(1000);
-                    }
-                    System.out.println("Imprimiendo y " + y + " binario: " + binaryY);
-                    int tam2 = binaryY.length();
-                    if(y>9){
-                        int numero2 = y - 10;
-                        String a = Integer.toBinaryString(numero2);
-                        int b = a.length();
-                        //Imprimiendo numero uno en y
-                        System.out.println("Imprimiendo y1 " + numero2);
-                        for(int j=0; j<8; j++){
-                            if(j < b){
-                                if(a.charAt(j) == '0')
-                                    dataOutputStream.write(0);
-                                else
-                                    dataOutputStream.write(1);
-                            }else
-                                dataOutputStream.write(0);
-                            dataOutputStream.flush();
-                            System.out.println("segundo" + j);
-                            Thread.sleep(1000);
-                        }
-                        System.out.println("Imprimiendo y2 1");
-                        for(int j=0; j<8; j++){
-                            if(j == 0){
-                                dataOutputStream.write(1);
-                            }else
-                                dataOutputStream.write(0);
-                            dataOutputStream.flush();
-                            System.out.println("segundo" + j);
-                            Thread.sleep(1000);
-                        }
-                    }else{
-                        String a = Integer.toBinaryString(y);
-                        int b = a.length();
-                        //Imprimiendo numero uno en y
-                        System.out.println("Imprimiendo y1 " + a);
-                        for(int j=0; j<8; j++){
-                            if(j < b){
-                                if(a.charAt(j) == '0')
-                                    dataOutputStream.write(0);
-                                else
-                                    dataOutputStream.write(1);
-                            }else
-                                dataOutputStream.write(0);
-                            dataOutputStream.flush();
-                            System.out.println("segundo" + j);
-                            Thread.sleep(1000);
-                        }
-                        System.out.println("Imprimiendo y2 0");
-                        for(int j=0; j<8; j++){
-                            dataOutputStream.write(0);
-                            dataOutputStream.flush();
-                            System.out.println("segundo" + j);
-                            Thread.sleep(1000);
-                        }
-                    }
-//                    for(int j=0; j<binaryY.length(); j++){
-//                        if(binaryY.charAt(tam2-1) == '0')
-//                            dataOutputStream.write(0);
-//                        else
-//                            dataOutputStream.write(1);
-//                        dataOutputStream.flush();
-//                        Thread.sleep(1000);
-//                        tam2--;
-//                    }
-                }
-            }
-            
-//            //Convert string to bytes to be sended throw parallel port
-//            inputStream = new FileReader("content.txt");
-//            int counter;
-//            int hexa;
-//            char character;
-//            String binary;
-//            byte[] byteArray = new byte[1];
-//            byteArray[0] = (byte)50;
-//            for(int i=0; i<byteArray.length; i++){
-//                binary = Integer.toBinaryString(678);
-//                System.out.println(binary);
-//                int tam = binary.length();
-//                for(int j=0; j<binary.length(); j++){
-//                    if(binary.charAt(tam-1) == '0')
-//                        dataOutputStream.write(0);
-//                    else
-//                        dataOutputStream.write(1);
-//                    dataOutputStream.flush();
-//                    Thread.sleep(1000);
-//                    tam--;
-//                }
-//                
-//                
-//            }                        
-            System.out.println("Close...");
-            dataOutputStream.close();
-            parallelPort.close();
-            //System.exit(0);        
-        }catch (NoSuchPortException nspe) {
-            System.out.println("Port not found: " + nspe);        
-        }catch (PortInUseException piuse){
-            System.out.println("Port in use " + piuse);
-        }catch (UnsupportedCommOperationException ucoe){
-            System.out.println(ucoe);
-        }catch (IOException ioe){
-            System.out.println("Error, failed to write: " + ioe);
+            for(int i=0; i<cadena.length(); i++){
+                if(cadena.charAt(i) == '0')
+                    puerto.setPin(pin, (short)0);
+                else
+                    puerto.setPin(pin, (short)1);
+                System.out.println("Pin "+cadena.charAt(i));
+                Thread.sleep(1000);
+            }                                              
         }catch (Exception e){
             System.out.println("Failed to open port with exeption: " + e);
-        } finally{
-            if(port != null && port.isCurrentlyOwned()){
-                parallelPort.close();
-            }
-            System.out.println("Closed all resources.");
         }
         System.out.println("END ---------- XXXXXXX");
-    }
+    }       
 }

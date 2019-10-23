@@ -10,6 +10,7 @@ import Estructuras.Celda;
 import Estructuras.Celda.enumColor;
 import Estructuras.Coordenada;
 import Estructuras.Panel;
+import Instrucciones.Hilo;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -24,6 +25,7 @@ import java.util.LinkedList;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import jnpout32.pPort;
 import paralelcomunicattion.Comunicacion;
 
 /**
@@ -33,6 +35,9 @@ import paralelcomunicattion.Comunicacion;
 public class Ventana extends javax.swing.JFrame {
 
     public static enumColor color = enumColor.NEGRO;
+    LinkedList<Celda> coordenadas = new LinkedList<Celda>();
+    
+    
     /**
      *
      */
@@ -40,7 +45,8 @@ public class Ventana extends javax.swing.JFrame {
      * Creates new form Ventana
      */
     public Ventana() {
-        initComponents();                
+        initComponents(); 
+        this.jButton15.setEnabled(false);
     }
 
     /**
@@ -71,6 +77,14 @@ public class Ventana extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jButton14 = new javax.swing.JButton();
         jButton16 = new javax.swing.JButton();
+        jButton15 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        coorX = new javax.swing.JLabel();
+        coorY = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -185,35 +199,37 @@ public class Ventana extends javax.swing.JFrame {
             }
         });
 
+        jButton15.setText("Continuar");
+        jButton15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton15ActionPerformed(evt);
+            }
+        });
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jLabel4.setText("Estado");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel5.setText("X");
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel6.setText("Y");
+
+        coorX.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        coorX.setText("0");
+
+        coorY.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        coorY.setText("0");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(49, 49, 49)
-                                .addComponent(jLabel1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                                        .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                            .addComponent(jLabel2)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3)
-                            .addComponent(jButton8)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jButton12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(18, 18, 18)
-                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jButton14)
@@ -222,17 +238,52 @@ public class Ventana extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton7)))
-                .addContainerGap(25, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton13)
-                        .addGap(217, 217, 217))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton16)
-                        .addContainerGap())))
+                        .addComponent(jButton7))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton16)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(49, 49, 49)
+                                        .addComponent(jLabel1))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                                                .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addComponent(jLabel2)
+                                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jButton8)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jButton12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButton11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButton9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButton10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGap(18, 18, 18)
+                                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(24, 24, 24)
+                                        .addComponent(jLabel5))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(13, 13, 13)
+                                        .addComponent(coorX)))
+                                .addGap(40, 40, 40)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(coorY)
+                                    .addComponent(jLabel6)))
+                            .addComponent(jButton13)
+                            .addComponent(jButton15))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -273,10 +324,26 @@ public class Ventana extends javax.swing.JFrame {
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(245, 245, 245))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton13)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(33, 33, 33)
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel6))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(coorX)
+                                    .addComponent(coorY))
+                                .addGap(34, 34, 34)
+                                .addComponent(jButton13)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton15)))
+                        .addContainerGap(52, Short.MAX_VALUE))))
         );
 
         pack();
@@ -304,11 +371,42 @@ public class Ventana extends javax.swing.JFrame {
         this.color = enumColor.AZUL;
     }//GEN-LAST:event_jButton3ActionPerformed
     
+    Boolean val = false;
+    public static int contador = 0;
+    int rs = 0;
     //Imprimir
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         // TODO add your handling code here:
-        Comunicacion a = new Comunicacion();
-        //a.ejecutar(this.Matriz);
+        //Limpiar las variables
+        coordenadas.clear();
+        
+        //Buscar puntos a imprimirº        
+        int index = this.jTabbedPane1.getSelectedIndex();
+        LinkedList<Celda> matriz = new LinkedList<Celda>();
+        if(pestañas.size() != 0){
+            for(int i = 0; i<pestañas.size(); i++){
+                Panel panel = pestañas.get(i);
+                if(panel.index == index){
+                    matriz = panel.elementos;
+                }
+            }
+            //Matriz para recibir solo los puntos de coordenadas
+            for(Celda p: matriz){
+                if(p!=null){
+                    if(p.getEstado() == 1){
+                        coordenadas.add(p);
+                    }
+                }            
+            }
+        }   
+        
+        this.jTextArea1.append("Se han encontrado: " + coordenadas.size() + " puntos para imprimir.\n");
+        if(coordenadas.size() != 0){
+            this.jButton13.setEnabled(false);
+            this.jButton15.setEnabled(true);
+        }
+            
+        
     }//GEN-LAST:event_jButton13ActionPerformed
 
     
@@ -338,7 +436,9 @@ public class Ventana extends javax.swing.JFrame {
             }
 
             if(band){
-                System.out.println("Archivo ya esta abierto");
+                String var = "Archivo ya esta abierto";
+                System.out.println(var);
+                this.jTextArea1.setText(var);
             }else{
                 //crear un panel
                 Lexico lexico = new Lexico(new BufferedReader(new StringReader(ir)));
@@ -378,11 +478,15 @@ public class Ventana extends javax.swing.JFrame {
                     pestañas.add(panel_);
                     
                 }catch(Exception e){
-                    System.out.println("Error al compilar archivo " + e);
+                    String var = "Error al compilar archivo\n";
+                    System.out.println(var);
+                    this.jTextArea1.append(var);
                 }
             }                                    
         }catch (Exception e){
-            System.out.println("No se pudo abrir el archivo");
+            String var = "No se pudo abrir el archivo\n";
+            System.out.println(var);
+            this.jTextArea1.append(var);                    
         }
         
     }//GEN-LAST:event_jButton5ActionPerformed
@@ -501,6 +605,64 @@ public class Ventana extends javax.swing.JFrame {
         String contenido = leer("src/Instrucciones/estrella.draw");
         insertarFigura(contenido);
     }//GEN-LAST:event_jButton12ActionPerformed
+
+    //Continuar siguentes 3
+    private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
+        // TODO add your handling code here:
+        this.jButton15.setEnabled(false);
+        Comunicacion conexion = new Comunicacion();
+        Hilo hilo = new Hilo();
+        int x1, x2, x3, y1, y2, y3;
+        int contenido = coordenadas.size();
+        String cadena = "0";
+        if(contenido != 0){
+            hilo.start();
+            if(contenido > 2){
+                x1 = coordenadas.get(0).getX();
+                x2 = coordenadas.get(1).getX();
+                x3 = coordenadas.get(2).getX();
+                y1 = coordenadas.get(0).getY();
+                y2 = coordenadas.get(1).getY();
+                y3 = coordenadas.get(2).getY();
+                coordenadas.remove(2);
+                coordenadas.remove(1);
+                coordenadas.remove(0);
+                cadena = cadena + conexion.convertir_binario(x1, y1);
+                cadena = cadena + conexion.convertir_binario(x2, y2);
+                cadena = cadena + conexion.convertir_binario(x3, y3) + "1";
+                this.jTextArea1.append("Imprimiendo: x="+x1+"y="+y1+" x="+x2+"y="+y2+" x="+x3+"y="+y3+"\n");
+                conexion.ejecutar_(cadena);
+                hilo.safeStop();
+                this.jButton15.setEnabled(true);
+            }else if(contenido == 2){                
+                x1 = coordenadas.get(0).getX();
+                x2 = coordenadas.get(1).getX();
+                y1 = coordenadas.get(0).getY();
+                y2 = coordenadas.get(1).getY();
+                coordenadas.remove(1);
+                coordenadas.remove(0);
+                cadena = cadena + conexion.convertir_binario(x1, y1);
+                cadena = cadena + conexion.convertir_binario(x2, y2)+ "1";
+                this.jTextArea1.append("Imprimiendo: x="+x1+"y="+y1+" x="+x2+"y="+y2+"\n");
+                hilo.safeStop();
+                conexion.ejecutar_(cadena);
+                this.jButton15.setEnabled(true);
+            }else if(contenido == 1){
+                x1 = coordenadas.get(0).getX();
+                y1 = coordenadas.get(0).getY();
+                coordenadas.remove(0);
+                cadena = cadena + conexion.convertir_binario(x1, y1)+ "1";
+                this.jTextArea1.append("Imprimiendo: x="+x1+"y="+y1+"\n");
+                conexion.ejecutar_(cadena);
+                hilo.safeStop();
+                this.jButton15.setEnabled(true);
+            }
+        }else{
+            this.jTextArea1.append("Operación terminada no hay mas coordenadas"+"\n");
+            this.jButton13.setEnabled(true);
+        }
+        
+    }//GEN-LAST:event_jButton15ActionPerformed
 
     public void insertarFigura(String contenido){
         Lexico lexico = new Lexico(new BufferedReader(new StringReader(contenido)));
@@ -666,12 +828,15 @@ public class Ventana extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public static javax.swing.JLabel coorX;
+    public static javax.swing.JLabel coorY;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton14;
+    private javax.swing.JButton jButton15;
     private javax.swing.JButton jButton16;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -684,6 +849,11 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }
